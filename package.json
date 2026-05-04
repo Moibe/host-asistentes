@@ -1,0 +1,19 @@
+{
+  "name": "host-asistentes",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "description": "Host público de los widgets embebibles (chatbot + mini-admin de documentos). No contiene admin — solo sirve los iframes que se incrustan en sitios externos.",
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.0",
+    "svelte": "^5.0.0",
+    "vite": "^6.3.0"
+  },
+  "dependencies": {
+    "iconify-icon": "^3.0.2"
+  }
+}
