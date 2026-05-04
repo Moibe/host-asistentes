@@ -43,6 +43,15 @@
 
   const maxTurnos = $derived(asistente?.historial_max ?? 5);
 
+  // Colores configurables por asistente (Look & Feel). Si la API aún no
+  // devuelve los campos, se usa el default.
+  const tema = $derived({
+    primario: asistente?.color_primario || '#5b6abf',
+    burbujaBot: asistente?.color_burbuja_bot || '#d4e4f7',
+    fondoChat: asistente?.color_fondo_chat || '#f0f2f5',
+    header: asistente?.color_header || '#ffffff',
+  });
+
   function formatTime(date) {
     return date.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
   }
@@ -206,7 +215,10 @@
   });
 </script>
 
-<div class="embed-app">
+<div
+  class="embed-app"
+  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header};"
+>
   <!-- Mini header -->
   <header class="embed-header">
     <div class="embed-avatar">
@@ -309,7 +321,7 @@
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    background: #f0f2f5;
+    background: var(--c-fondo-chat, #f0f2f5);
   }
 
   .config-error {
@@ -328,7 +340,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    background: #fff;
+    background: var(--c-header, #fff);
     border-bottom: 1px solid #e0e0e0;
     flex-shrink: 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
@@ -338,8 +350,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #6b8aaf;
-    border: 2px solid #8faac8;
+    background: var(--c-primario, #6b8aaf);
+    border: 2px solid color-mix(in srgb, var(--c-primario, #6b8aaf) 70%, white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -416,8 +428,8 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: #6b8aaf;
-    border: 1.5px solid #8faac8;
+    background: var(--c-primario, #6b8aaf);
+    border: 1.5px solid color-mix(in srgb, var(--c-primario, #6b8aaf) 70%, white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -451,10 +463,10 @@
   }
 
   .message-row.bot .bubble {
-    background: #d4e4f7;
+    background: var(--c-burbuja-bot, #d4e4f7);
     color: #1a1a2e;
     border-bottom-left-radius: 4px;
-    border: 1px solid #c0d6ed;
+    border: 1px solid color-mix(in srgb, var(--c-burbuja-bot, #d4e4f7) 75%, black);
   }
 
   .message-row.user .bubble {
@@ -492,7 +504,7 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #6b8aaf;
+    background: var(--c-primario, #6b8aaf);
     animation: bounce 1.2s ease-in-out infinite;
   }
 
@@ -508,7 +520,7 @@
   /* ── Input ──────────────────────────── */
   .embed-input-area {
     padding: 0.75rem;
-    background: #fff;
+    background: var(--c-header, #fff);
     border-top: 1px solid #e0e0e0;
     flex-shrink: 0;
   }
@@ -563,7 +575,7 @@
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: #5b6abf;
+    background: var(--c-primario, #5b6abf);
     color: #fff;
     cursor: pointer;
     display: flex;
@@ -571,7 +583,7 @@
     justify-content: center;
     flex-shrink: 0;
     transition: transform 0.15s, opacity 0.15s, background 0.15s;
-    box-shadow: 0 2px 8px rgba(91, 106, 191, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
   }
 
   .embed-input-container button svg {
@@ -581,7 +593,7 @@
 
   .embed-input-container button:hover:not(:disabled) {
     transform: scale(1.08);
-    background: #4a59a8;
+    filter: brightness(0.9);
   }
 
   .embed-input-container button:active:not(:disabled) {

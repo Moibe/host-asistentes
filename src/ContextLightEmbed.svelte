@@ -35,6 +35,14 @@
   // ─── Estado ──────────────────────────────────────────
   let asistente = $state(null);
   const contexto = $derived(asistente?.contexto ?? '');
+
+  // Colores configurables por asistente (Look & Feel).
+  const tema = $derived({
+    primario: asistente?.color_primario || '#5b6abf',
+    burbujaBot: asistente?.color_burbuja_bot || '#d4e4f7',
+    fondoChat: asistente?.color_fondo_chat || '#f0f2f5',
+    header: asistente?.color_header || '#ffffff',
+  });
   let configError = $state('');
   let documentos = $state([]);
   let cargando = $state(false);
@@ -151,7 +159,10 @@
   cargarAsistente();
 </script>
 
-<div class="embed-app">
+<div
+  class="embed-app"
+  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header};"
+>
   <!-- Mini header -->
   <header class="embed-header">
     <div class="embed-avatar">
@@ -275,7 +286,7 @@
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    background: #f0f2f5;
+    background: var(--c-fondo-chat, #f0f2f5);
   }
 
   /* ── Header ─────────────────────────── */
@@ -284,7 +295,7 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
-    background: #fff;
+    background: var(--c-header, #fff);
     border-bottom: 1px solid #e0e0e0;
     flex-shrink: 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
@@ -294,8 +305,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: #6b8aaf;
-    border: 2px solid #8faac8;
+    background: var(--c-primario, #6b8aaf);
+    border: 2px solid color-mix(in srgb, var(--c-primario, #6b8aaf) 70%, white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -481,7 +492,7 @@
   }
 
   .btn-primary {
-    background: #5b6abf;
+    background: var(--c-primario, #5b6abf);
     color: #fff;
     border: none;
     padding: 0.5rem 1.1rem;
@@ -490,11 +501,11 @@
     font-size: 0.85rem;
     font-weight: 500;
     margin-top: 0.5rem;
-    box-shadow: 0 2px 8px rgba(91, 106, 191, 0.35);
-    transition: transform 0.15s, background 0.15s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    transition: transform 0.15s, filter 0.15s;
   }
   .btn-primary:hover:not(:disabled) {
-    background: #4a59a8;
+    filter: brightness(0.9);
     transform: scale(1.02);
   }
   .btn-primary:active:not(:disabled) { transform: scale(0.98); }
@@ -540,7 +551,7 @@
   }
   .progress-bar {
     height: 100%;
-    background: #5b6abf;
+    background: var(--c-primario, #5b6abf);
     transition: width 0.2s;
   }
 
