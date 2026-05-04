@@ -43,6 +43,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
+        index: resolve(__dirname, 'index.html'),
         embed: resolve(__dirname, 'embed/index.html'),
       },
     },

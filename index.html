@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Host de asistentes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background:
+          radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.18), transparent 55%),
+          radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.14), transparent 55%),
+          #0b1020;
+        color: #e6e8ef;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        -webkit-font-smoothing: antialiased;
+      }
+      .card {
+        max-width: 520px;
+        width: 100%;
+        text-align: center;
+        padding: 40px 32px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(8px);
+      }
+      .badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #a5b4fc;
+        background: rgba(99, 102, 241, 0.12);
+        border: 1px solid rgba(99, 102, 241, 0.28);
+        padding: 6px 12px;
+        border-radius: 999px;
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.55;
+        color: #b8becd;
+      }
+      .hint {
+        margin-top: 24px;
+        font-size: 13px;
+        color: #7d8499;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12.5px;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 2px 6px;
+        border-radius: 6px;
+        color: #cdd3e1;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <span class="badge">Host de widgets</span>
+      <h1>No hay página pública aquí</h1>
+      <p>
+        Este servicio aloja widgets embebibles de chat y administración de documentos.
+        Se cargan dentro de otros sitios mediante <code>&lt;iframe&gt;</code>; no tienen
+        una vista directa accesible desde esta URL.
+      </p>
+      <p class="hint">Si llegaste por error, podés cerrar esta pestaña.</p>
+    </main>
+  </body>
+</html>
