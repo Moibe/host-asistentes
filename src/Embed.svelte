@@ -2,37 +2,19 @@
   import { tick, onMount } from 'svelte';
 
   // ─── Config ──────────────────────────────────────────
-  const AMBIENTES = {
-    desarrollo: { url: 'http://127.0.0.1:8077', proxy: '/api-desarrollo' },
-    staging: { url: 'http://172.10.30.15:8077', proxy: '/api-staging' },
-    producción: { url: 'http://172.10.30.16:8080', proxy: '/api-produccion' },
-  };
-
-  const DEFAULT_AMBIENTE = import.meta.env.DEV
-    ? 'desarrollo'
-    : import.meta.env.MODE === 'staging'
-    ? 'staging'
-    : 'producción';
-
-  // El slug viene como prop (extraído del path por el router); ambiente
-  // sigue siendo un override opcional vía ?ambiente=producción.
+  // Sin ambientes. El API vive en el mismo host de la app, puerto 8077.
+  // Slug viene como prop (extraído del path por el router) o vía query
+  // legacy ?agente=<slug> si alguien llega por la URL antigua.
   let { slug = '' } = $props();
 
+  const API_PORT = 8077;
   const params = new URLSearchParams(window.location.search);
-  const ambienteParam = params.get('ambiente') || DEFAULT_AMBIENTE;
   const asistenteSlugParam = (slug || params.get('agente') || '').trim();
 
-  let ambienteSeleccionado = $state(
-    Object.keys(AMBIENTES).includes(ambienteParam) ? ambienteParam : DEFAULT_AMBIENTE
-  );
-
-  let apiUrl = $derived.by(() => {
-    const config = AMBIENTES[ambienteSeleccionado];
-    return {
-      real: config.url,
-      base: import.meta.env.DEV ? config.proxy : config.url,
-    };
-  });
+  const apiUrl = (() => {
+    const url = `${location.protocol}//${location.hostname}:${API_PORT}`;
+    return { real: url, base: url };
+  })();
 
   // ─── Estado ──────────────────────────────────────────
   let asistente = $state(null);
@@ -56,14 +38,18 @@
     return date.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
   }
 
-  const MENSAJE_INICIAL = {
-    id: 1,
-    role: 'bot',
-    text: '¡Hola! ¿En qué puedo ayudarte hoy?',
-    time: formatTime(new Date()),
-  };
+  const MENSAJE_INICIAL_DEFAULT = '¡Hola! ¿En qué puedo ayudarte hoy?';
 
-  let messages = $state([{ ...MENSAJE_INICIAL }]);
+  function buildMensajeInicial() {
+    return {
+      id: 1,
+      role: 'bot',
+      text: asistente?.mensaje_inicial?.trim() || MENSAJE_INICIAL_DEFAULT,
+      time: formatTime(new Date()),
+    };
+  }
+
+  let messages = $state([buildMensajeInicial()]);
 
   // ─── Cargar asistente del backend ───────────────────────
   async function cargarAsistente() {
@@ -81,10 +67,19 @@
       const lista = await res.json();
       const found = Array.isArray(lista) ? lista.find((a) => a.slug === asistenteSlugParam) : null;
       if (!found) {
-        configError = `No existe un asistente con slug "${asistenteSlugParam}" en el ambiente "${ambienteSeleccionado}".`;
+        configError = `No existe un asistente con slug "${asistenteSlugParam}" en ${location.host}.`;
         return;
       }
       asistente = found;
+      // Si el asistente trae mensaje_inicial custom y no se ha iniciado
+      // conversación todavía, reemplaza el saludo de bienvenida.
+      if (
+        asistente?.mensaje_inicial?.trim() &&
+        messages.length === 1 &&
+        messages[0]?.role === 'bot'
+      ) {
+        messages = [buildMensajeInicial()];
+      }
     } catch (err) {
       configError = `No se pudo cargar el asistente: ${err.message}`;
     }
@@ -183,7 +178,10 @@
           id: Date.now() + 1,
           role: 'bot',
           text: botText,
-          time: `${formatTime(new Date())} · ${elapsed}ms`,
+          // `elapsed` se calcula y queda disponible (logs/console) pero no se
+          // renderiza en la burbuja. Para mostrarlo de nuevo: cambia esta línea
+          // por: `${formatTime(new Date())} · ${elapsed}ms`
+          time: formatTime(new Date()),
         },
       ];
     } catch (err) {
@@ -213,6 +211,32 @@
   onMount(() => {
     cargarAsistente();
   });
+
+  // Parsea texto plano y devuelve segmentos: { type: 'text' | 'link', value }.
+  // Detecta URLs http(s):// y limpia puntuación final pegada (., , ; ! ? )).
+  function parseLinks(text) {
+    if (!text) return [{ type: 'text', value: '' }];
+    const re = /(https?:\/\/[^\s]+)/g;
+    const parts = [];
+    let last = 0;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      if (m.index > last) parts.push({ type: 'text', value: text.slice(last, m.index) });
+      let url = m[0];
+      // Elimina puntuación final que probablemente NO es parte de la URL.
+      const trail = url.match(/[.,;!?)\]]+$/);
+      let trailingText = '';
+      if (trail) {
+        trailingText = trail[0];
+        url = url.slice(0, -trail[0].length);
+      }
+      parts.push({ type: 'link', value: url });
+      if (trailingText) parts.push({ type: 'text', value: trailingText });
+      last = m.index + m[0].length;
+    }
+    if (last < text.length) parts.push({ type: 'text', value: text.slice(last) });
+    return parts;
+  }
 </script>
 
 <div
@@ -251,7 +275,7 @@
             </div>
           {/if}
           <div class="bubble-wrap">
-            <div class="bubble">{msg.text}</div>
+            <div class="bubble">{#each parseLinks(msg.text) as part}{#if part.type === 'link'}<a href={part.value} target="_blank" rel="noopener noreferrer" class="bubble-link">{part.value}</a>{:else}{part.value}{/if}{/each}</div>
             <span class="time">{msg.time}</span>
           </div>
         </div>
@@ -481,6 +505,18 @@
   .message-row.error .bubble {
     background: #fde8e8;
     border-color: #f5a5a5;
+    color: #9b1c1c;
+  }
+
+  .bubble-link {
+    color: #1d4ed8;
+    text-decoration: underline;
+    word-break: break-all;
+  }
+  .bubble-link:hover {
+    color: #1e3a8a;
+  }
+  .message-row.error .bubble-link {
     color: #9b1c1c;
   }
 

@@ -22,8 +22,6 @@ function embedSpaFallback() {
   return {
     name: 'embed-spa-fallback',
     configureServer(server) {
-      // Pre-hook: registramos antes que el static-file middleware de Vite
-      // para poder reescribir la URL antes de que intente servir el archivo.
       server.middlewares.use((req, _res, next) => {
         rewrite(req);
         next();
@@ -49,24 +47,8 @@ export default defineConfig({
     },
   },
   server: {
-    port: 5174,
-    proxy: {
-      '/api-desarrollo': {
-        target: 'http://127.0.0.1:8077',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-desarrollo/, ''),
-      },
-      '/api-staging': {
-        target: 'http://172.10.30.15:8077',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-staging/, ''),
-      },
-      '/api-produccion': {
-        target: 'http://172.10.30.16:8080',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api-produccion/, ''),
-      },
-    },
+    port: 4176,
+    host: true,
   },
   preview: {
     port: 4176,
