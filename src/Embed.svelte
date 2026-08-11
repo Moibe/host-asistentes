@@ -16,6 +16,29 @@
     return { real: url, base: url };
   })();
 
+  // ─── Usuario final identificado (NO autenticación) ──────────────
+  // El admin manda una vez el link con `?usuario=<slug>`; a partir de ahí el
+  // navegador de esa persona lo recuerda (localStorage, scoped por asistente
+  // para que probar dos asistentes distintos no mezcle identidades), y puede
+  // volver a usar la URL universal sin el query param. El backend resuelve el
+  // slug contra el proyecto del asistente y lo ignora si no matchea nada (se
+  // loguea anónimo) — ver constructor-agente-rag/usuarios.py.
+  const USUARIO_STORAGE_KEY = asistenteSlugParam ? `bzz_usuario_${asistenteSlugParam}` : null;
+
+  function resolverUsuarioSlug() {
+    const desdeUrl = (params.get('usuario') || '').trim();
+    const storageDisponible = USUARIO_STORAGE_KEY && typeof localStorage !== 'undefined';
+    if (desdeUrl) {
+      // El query param explícito siempre gana y reemplaza lo guardado — permite
+      // corregir un link mandado por error sin tener que limpiar localStorage.
+      if (storageDisponible) localStorage.setItem(USUARIO_STORAGE_KEY, desdeUrl);
+      return desdeUrl;
+    }
+    return storageDisponible ? (localStorage.getItem(USUARIO_STORAGE_KEY) || '') : '';
+  }
+
+  const usuarioSlug = resolverUsuarioSlug();
+
   // ─── Estado ──────────────────────────────────────────
   let asistente = $state(null);
   let inputText = $state('');
@@ -154,6 +177,7 @@
         pregunta: text,
         historial: buildHistorial(),
       };
+      if (usuarioSlug) payload.usuario_slug = usuarioSlug;
 
       const t0 = performance.now();
       const response = await fetch(`${apiUrl.base}/chatbot`, {
