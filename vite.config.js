@@ -36,6 +36,19 @@ function embedSpaFallback() {
   };
 }
 
+// El widget llama al API por ruta relativa (/api/...) en vez de host:8077
+// directo — ver Embed.svelte/ContextLightEmbed.svelte. Este proxy es lo que
+// hace que /api/* llegue de verdad al backend, tanto en dev como en el
+// servidor real (que corre `vite preview`). Sin este bloque, /api/* devolvería
+// 404 del propio Vite en vez de reenviarse a FastAPI.
+const apiProxy = {
+  '/api': {
+    target: 'http://127.0.0.1:8077',
+    changeOrigin: true,
+    rewrite: (path) => path.replace(/^\/api/, ''),
+  },
+};
+
 export default defineConfig({
   plugins: [svelte(), embedSpaFallback()],
   build: {
@@ -49,9 +62,11 @@ export default defineConfig({
   server: {
     port: 4176,
     host: true,
+    proxy: apiProxy,
   },
   preview: {
     port: 4176,
     host: true,
+    proxy: apiProxy,
   },
 });
