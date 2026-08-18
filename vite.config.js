@@ -63,10 +63,15 @@ export default defineConfig({
     port: 4176,
     host: true,
     proxy: apiProxy,
+    // El punto inicial permite el dominio y cualquier subdominio (aria.,
+    // dev-obartbroker., etc.) — evita tener que agregar cada asistente/dominio
+    // nuevo uno por uno cada vez que infra los monte.
+    allowedHosts: ['.buzzword.com.mx'],
   },
   preview: {
     port: 4176,
     host: true,
     proxy: apiProxy,
+    allowedHosts: ['.buzzword.com.mx'],
   },
 });
