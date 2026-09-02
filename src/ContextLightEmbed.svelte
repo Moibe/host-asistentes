@@ -150,9 +150,13 @@
   <!-- Mini header -->
   <header class="embed-header">
     <div class="embed-avatar">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="currentColor"/>
-      </svg>
+      {#if asistente?.icono_url}
+        <img class="avatar-icono-custom" src={asistente.icono_url} alt="" />
+      {:else}
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="currentColor"/>
+        </svg>
+      {/if}
     </div>
     <div class="embed-header-info">
       <span class="embed-title">{asistente?.nombre ? `Documentos · ${asistente.nombre}` : 'Documentos'}</span>
@@ -301,6 +305,14 @@
   .embed-avatar svg {
     width: 20px;
     height: 20px;
+  }
+
+  .avatar-icono-custom {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
   }
 
   .embed-header-info {
