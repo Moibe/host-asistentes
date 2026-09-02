@@ -69,6 +69,8 @@
     // Sin override propio, heredan de color_primario.
     avatar: asistente?.color_avatar || asistente?.color_primario || '#5b6abf',
     botonEnviar: asistente?.color_boton_enviar || asistente?.color_primario || '#5b6abf',
+    textoHeader: asistente?.color_texto_header || '#1a1a2e',
+    icono: asistente?.color_icono || '#ffffff',
   });
 
   function formatTime(date) {
@@ -279,13 +281,13 @@
 
 <div
   class="embed-app"
-  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar}; --c-boton: {tema.botonEnviar};"
+  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar}; --c-boton: {tema.botonEnviar}; --c-texto-header: {tema.textoHeader}; --c-icono: {tema.icono};"
 >
   <!-- Mini header -->
   <header class="embed-header">
     <div class="embed-avatar">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM8 17.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM9.5 8c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5S9.5 9.38 9.5 8zm6.5 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="white"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM8 17.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM9.5 8c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5S9.5 9.38 9.5 8zm6.5 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="currentColor"/>
       </svg>
     </div>
     <div class="embed-header-info">
@@ -419,12 +421,12 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: var(--c-icono, white);
   }
 
   .embed-avatar svg {
     width: 20px;
     height: 20px;
-    fill: white;
   }
 
   .embed-header-info {
@@ -436,7 +438,7 @@
   .embed-title {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #1a1a2e;
+    color: var(--c-texto-header, #1a1a2e);
   }
 
   .embed-context {
@@ -497,7 +499,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: #fff;
+    color: var(--c-icono, white);
   }
 
   .bot-avatar svg {

@@ -24,6 +24,8 @@
     fondoChat: asistente?.color_fondo_chat || '#f0f2f5',
     header: asistente?.color_header || '#ffffff',
     avatar: asistente?.color_avatar || asistente?.color_primario || '#5b6abf',
+    textoHeader: asistente?.color_texto_header || '#1a1a2e',
+    icono: asistente?.color_icono || '#ffffff',
   });
   let configError = $state('');
   let documentos = $state([]);
@@ -143,13 +145,13 @@
 
 <div
   class="embed-app"
-  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar};"
+  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar}; --c-texto-header: {tema.textoHeader}; --c-icono: {tema.icono};"
 >
   <!-- Mini header -->
   <header class="embed-header">
     <div class="embed-avatar">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="white"/>
+        <path d="M19 3H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.11-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" fill="currentColor"/>
       </svg>
     </div>
     <div class="embed-header-info">
@@ -293,6 +295,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    color: var(--c-icono, white);
   }
 
   .embed-avatar svg {
@@ -311,7 +314,7 @@
   .embed-title {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #1a1a2e;
+    color: var(--c-texto-header, #1a1a2e);
   }
 
   .embed-context {
