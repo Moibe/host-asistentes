@@ -66,6 +66,9 @@
     burbujaBot: asistente?.color_burbuja_bot || '#d4e4f7',
     fondoChat: asistente?.color_fondo_chat || '#f0f2f5',
     header: asistente?.color_header || '#ffffff',
+    // Sin override propio, heredan de color_primario.
+    avatar: asistente?.color_avatar || asistente?.color_primario || '#5b6abf',
+    botonEnviar: asistente?.color_boton_enviar || asistente?.color_primario || '#5b6abf',
   });
 
   function formatTime(date) {
@@ -276,7 +279,7 @@
 
 <div
   class="embed-app"
-  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header};"
+  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar}; --c-boton: {tema.botonEnviar};"
 >
   <!-- Mini header -->
   <header class="embed-header">
@@ -410,8 +413,8 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: var(--c-primario, #6b8aaf);
-    border: 2px solid color-mix(in srgb, var(--c-primario, #6b8aaf) 70%, white);
+    background: var(--c-avatar, #6b8aaf);
+    border: 2px solid color-mix(in srgb, var(--c-avatar, #6b8aaf) 70%, white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -488,8 +491,8 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background: var(--c-primario, #6b8aaf);
-    border: 1.5px solid color-mix(in srgb, var(--c-primario, #6b8aaf) 70%, white);
+    background: var(--c-avatar, #6b8aaf);
+    border: 1.5px solid color-mix(in srgb, var(--c-avatar, #6b8aaf) 70%, white);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -650,7 +653,7 @@
     height: 36px;
     border-radius: 50%;
     border: none;
-    background: var(--c-primario, #5b6abf);
+    background: var(--c-boton, #5b6abf);
     color: #fff;
     cursor: pointer;
     display: flex;
