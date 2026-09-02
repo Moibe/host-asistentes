@@ -71,6 +71,7 @@
     botonEnviar: asistente?.color_boton_enviar || asistente?.color_primario || '#5b6abf',
     textoHeader: asistente?.color_texto_header || '#1a1a2e',
     icono: asistente?.color_icono || '#ffffff',
+    iconoBoton: asistente?.color_icono_boton || '#ffffff',
   });
 
   function formatTime(date) {
@@ -281,7 +282,7 @@
 
 <div
   class="embed-app"
-  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar}; --c-boton: {tema.botonEnviar}; --c-texto-header: {tema.textoHeader}; --c-icono: {tema.icono};"
+  style="--c-primario: {tema.primario}; --c-burbuja-bot: {tema.burbujaBot}; --c-fondo-chat: {tema.fondoChat}; --c-header: {tema.header}; --c-avatar: {tema.avatar}; --c-boton: {tema.botonEnviar}; --c-texto-header: {tema.textoHeader}; --c-icono: {tema.icono}; --c-icono-boton: {tema.iconoBoton};"
 >
   <!-- Mini header -->
   <header class="embed-header">
@@ -656,7 +657,7 @@
     border-radius: 50%;
     border: none;
     background: var(--c-boton, #5b6abf);
-    color: #fff;
+    color: var(--c-icono-boton, white);
     cursor: pointer;
     display: flex;
     align-items: center;
