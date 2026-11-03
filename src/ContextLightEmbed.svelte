@@ -16,6 +16,8 @@
   // ─── Estado ──────────────────────────────────────────
   let asistente = $state(null);
   const contexto = $derived(asistente?.contexto ?? '');
+  // Sólo para mostrar: la etiqueta legible de la BC, con el identificador de respaldo.
+  const contextoVisible = $derived(asistente?.contexto_nombre_visible || contexto);
 
   // Colores configurables por asistente (Look & Feel).
   const tema = $derived({
@@ -161,7 +163,7 @@
     <div class="embed-header-info">
       <span class="embed-title">{asistente?.nombre ? `Documentos · ${asistente.nombre}` : 'Documentos'}</span>
       {#if contexto}
-        <span class="embed-context">{contexto}</span>
+        <span class="embed-context">{contextoVisible}</span>
       {/if}
     </div>
     <button class="embed-reload" onclick={cargarDocumentos} disabled={cargando} title="Recargar" aria-label="Recargar">
