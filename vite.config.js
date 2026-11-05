@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 // Reescribe cualquier ruta /embed/<algo> (sin extensión) a /embed/index.html
@@ -36,6 +36,12 @@ function embedSpaFallback() {
   };
 }
 
+// PORT y API_PORT salen del .env del checkout (default prod: UI 4175/4176, API 8077),
+// para poder correr un entorno dev con otros puertos en el mismo servidor.
+const env = loadEnv('', process.cwd(), '');
+const PORT = Number(env.PORT) || 4176;
+const API_PORT = Number(env.API_PORT) || 8077;
+
 // El widget llama al API por ruta relativa (/api/...) en vez de host:8077
 // directo — ver Embed.svelte/ContextLightEmbed.svelte. Este proxy es lo que
 // hace que /api/* llegue de verdad al backend, tanto en dev como en el
@@ -43,7 +49,7 @@ function embedSpaFallback() {
 // 404 del propio Vite en vez de reenviarse a FastAPI.
 const apiProxy = {
   '/api': {
-    target: 'http://127.0.0.1:8077',
+    target: `http://127.0.0.1:${API_PORT}`,
     changeOrigin: true,
     rewrite: (path) => path.replace(/^\/api/, ''),
   },
@@ -60,7 +66,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 4176,
+    port: PORT,
     host: true,
     proxy: apiProxy,
     // El punto inicial permite el dominio y cualquier subdominio (aria.,
@@ -69,7 +75,7 @@ export default defineConfig({
     allowedHosts: ['.buzzword.com.mx'],
   },
   preview: {
-    port: 4176,
+    port: PORT,
     host: true,
     proxy: apiProxy,
     allowedHosts: ['.buzzword.com.mx'],
